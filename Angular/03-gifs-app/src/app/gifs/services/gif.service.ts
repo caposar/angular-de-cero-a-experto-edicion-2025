@@ -26,8 +26,21 @@ export class GifService {
   private http = inject(HttpClient);
   private readonly storage = inject(StorageService);
 
-  trendingGifs = signal<Gif[]>([]);
-  trendingGifsLoading = signal<boolean>(true);
+  trendingGifs = signal<Gif[]>([]); // [gif,gif,gif,gif,gif,gif,...] Default gallery
+  trendingGifsLoading = signal<boolean>(false);
+  private trendingPage = signal<number>(0);
+
+  // [[gif,gif,gif],[gif,gif,gif],[gif,gif,gif],...]] Masonry grid
+  trendingGifGroup = computed(() => {
+    const gifs = this.trendingGifs();
+    const groupSize = 3; // Number of gifs per group
+    const groups: Gif[][] = [];
+    for (let i = 0; i < gifs.length; i += groupSize) {
+      groups.push(gifs.slice(i, i + groupSize));
+    }
+
+    return groups;
+  });
 
   searchHistory = signal<Record<string, Gif[]>>(
     this.storage.getItem<Record<string, Gif[]>>(this.STORAGE_KEY) ?? {}
@@ -36,28 +49,36 @@ export class GifService {
 
   constructor() {
     this.loadTrendingGifs();
-    console.log('GifService initialized');
   }
 
   private readonly saveToLocalStorage = effect(() => {
     const historyGifs = this.searchHistory();
     this.storage.setItem(this.STORAGE_KEY, historyGifs);
-    console.log('Guardado en localStorage:', historyGifs);
   });
 
   loadTrendingGifs() {
+
+    if (this.trendingGifsLoading()) {
+      return; // Already loading or loaded
+    }
+
+    this.trendingGifsLoading.set(true);
+
+
     const url = `${environment.giphyUrl}/gifs/trending`;
     return this.http.get<GiphyResponse>(url, {
       params: {
         api_key: environment.giphyApiKey,
         limit: 20,
+        offset: this.trendingPage() * 20,
         rating: 'g'
       }
     }).subscribe((resp)=> {
       const gifs = GifMapper.mapGiphyItemsToGifArray(resp.data);
-      this.trendingGifs.set(gifs);
+      // this.trendingGifs.set(gifs);
+      this.trendingGifs.update((currentGifs) => [...currentGifs, ...gifs]);
+      this.trendingPage.update((page) => page + 1);
       this.trendingGifsLoading.set(false);
-      console.log('Mapped Gifs:', gifs);
     });
   }
 

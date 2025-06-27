@@ -1,5 +1,14 @@
+<!-- Default gallery -->
 <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4">
   @for (gif of gifs(); track gif) {
     <gif-list-item [imageUrl]="gif.url" />
   }
 </div>
+
+<!-- MAS FACIL para ver Masonry grid: Funciona con opcion 1. No necesita la señal "trendingGifGroup" solo la original "trendingGifs" -->
+<!-- <div class="columns-2 md:columns-4 gap-4">
+  @for (gif of gifs(); track gif) {
+    <img [src]="gif.url" class="mb-4 w-full rounded-lg" />
+  }
+</div> -->
+
