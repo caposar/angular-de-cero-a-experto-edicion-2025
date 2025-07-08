@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { rxResource } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
+import { rxResource } from '@angular/core/rxjs-interop';
 import { CountryService } from '../../services/country.service';
 import { NotFoundComponent } from '../../../shared/components/not-found/not-found.component';
 import { CountryInformationComponent } from "./country-information/country-information.component";
@@ -19,8 +19,8 @@ import { CountryInformationComponent } from "./country-information/country-infor
   templateUrl: './country-page.component.html',
 })
 export class CountryPageComponent {
-  private route = inject(ActivatedRoute);
   countryService = inject(CountryService);
+  private route = inject(ActivatedRoute);
 
   // No reacciona a cambios de parámetros en la misma instancia del componente.
   // Si el usuario navega a otro país desde la misma página, el valor no se actualizará.

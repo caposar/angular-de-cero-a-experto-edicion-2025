@@ -1,1 +1,15 @@
-<country-list [countries]="countries()" />
+<app-region-menu (search)="onSearch($event)" [initialValue]="query()" />
+
+<!-- Válido para OPCION 1 y OPCION 2 -->
+<country-list
+  [countries]="countryResource.value() ?? []"
+  [errorMessage]="countryResource.error()"
+  [isLoading]="countryResource.isLoading()"
+/>
+
+<!-- Válido para OPCION 3 -->
+<!-- <country-list
+  [countries]="countries()"
+  [errorMessage]="isError()"
+  [isLoading]="isLoading()"
+/> -->

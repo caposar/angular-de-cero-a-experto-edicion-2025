@@ -1,6 +1,15 @@
 <country-search-input
-  (search)="onSearch($event)"
   placeholder="Buscar por pais"
+  (search)="onSearch($event)"
+  [debounceTime]="500"
+  [initialValue]="query()"
+/>
+
+<!-- Válido para OPCION 1 y OPCION 2 -->
+<country-list
+  [countries]="countryResource.value() ?? []"
+  [errorMessage]="countryResource.error()"
+  [isLoading]="countryResource.isLoading()"
 />
 
 <!-- Válido para OPCION 3 -->
@@ -9,10 +18,3 @@
   [errorMessage]="isError()"
   [isLoading]="isLoading()"
 /> -->
-
-<!-- Válido para OPCION 1 y OPCION 2 -->
-<country-list
-  [countries]="countryResource.value() ?? []"
-  [errorMessage]="countryResource.error()"
-  [isLoading]="countryResource.isLoading()"
-/>

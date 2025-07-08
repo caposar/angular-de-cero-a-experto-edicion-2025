@@ -1,4 +1,5 @@
-import { Component, inject, resource, signal } from '@angular/core';
+import { Component, inject, linkedSignal, resource, signal } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom, of } from 'rxjs';
 import { rxResource } from '@angular/core/rxjs-interop';
 
@@ -14,7 +15,12 @@ import { Country } from '../../interfaces/country.interface';
 })
 export class ByCountryPageComponent {
   countryService = inject(CountryService);
-  query = signal<string>('');
+
+  activatedRoute = inject(ActivatedRoute);
+  router = inject(Router);
+
+  queryParam = this.activatedRoute.snapshot.queryParamMap.get('query') ?? '';
+  query = linkedSignal<string>(() => this.queryParam);
 
   // OPCION 1: Usamos rxResource porque el loader puede retornar directamente un observable de Angular.
   // Si el query está vacío, devolvemos un observable vacío (of([])) para evitar llamadas innecesarias.
@@ -25,6 +31,13 @@ export class ByCountryPageComponent {
       if (!request.query) {
         return of([]);
       }
+
+      this.router.navigate([], {
+        relativeTo: this.activatedRoute,
+        queryParams: {
+          query: request.query,
+        }
+      });
 
       return this.countryService.searchByCountry(request.query);
     }
@@ -39,6 +52,13 @@ export class ByCountryPageComponent {
   //     if (!request.query) {
   //       return [];
   //     }
+
+  //     this.router.navigate([], {
+  //       relativeTo: this.activatedRoute,
+  //       queryParams: {
+  //         query: request.query,
+  //       }
+  //     });
 
   //     return await firstValueFrom(
   //       this.countryService.searchByCountry(request.query)
@@ -61,6 +81,13 @@ export class ByCountryPageComponent {
   //   if (this.isLoading()) {
   //     return;
   //   }
+
+  //   this.router.navigate([], {
+  //     relativeTo: this.activatedRoute,
+  //     queryParams: {
+  //       query: query,
+  //     }
+  //   });
 
   //   this.isLoading.set(true);
   //   this.isError.set(null);
