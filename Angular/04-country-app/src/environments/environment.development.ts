@@ -1,7 +1,7 @@
 import { MapProviderId } from "../app/shared/constants/map-providers";
 
 export const environment = {
-  production: true,
+  production: false,
   mapProviderId: 'maptiler' as MapProviderId,
   mapApiKeys: {
     maptiler: 'MB2esNUXUl6tMxDR5nS6',

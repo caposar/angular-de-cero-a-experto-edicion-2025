@@ -28,7 +28,6 @@ export class CountryService {
     return this.http.get<RESTCountry[]>(url).pipe(
       map((resp) => CountryMapper.toCountries(resp)),
       tap((countries) => this.queryCacheCapital.set(query, countries)),
-      delay(3000), // Borrar, esta linea solo se usa para pruebas
       catchError(this.handleError(query, 'searchByCapital'))
     );
   }
@@ -47,7 +46,6 @@ export class CountryService {
     return this.http.get<RESTCountry[]>(url).pipe(
       map((resp) => CountryMapper.toCountries(resp)),
       tap((countries) => this.queryCacheCountry.set(query, countries)),
-      delay(3000), // Borrar, esta linea solo se usa para pruebas
       catchError(this.handleError(query, 'searchByCountry'))
     );
   }
@@ -64,7 +62,6 @@ export class CountryService {
     return this.http.get<RESTCountry[]>(url).pipe(
       map((resp) => CountryMapper.toCountries(resp)),
       tap((countries) => this.queryCacheRegion.set(region, countries)),
-      delay(3000), // Borrar, esta linea solo se usa para pruebas
       catchError((error) => {
         console.log('Error fetching:', error);
         return throwError(
@@ -79,7 +76,6 @@ export class CountryService {
     return this.http.get<RESTCountry[]>(url).pipe(
       map((resp) => CountryMapper.toCountries(resp)),
       map((countries) => countries.at(0)),
-      delay(3000), // Borrar, esta linea solo se usa para pruebas
       catchError((error) => {
         console.log('Error fetching:', error);
         return throwError(
