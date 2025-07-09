@@ -1,0 +1,53 @@
+<!-- <ul class="menu menu-vertical lg:menu-horizontal bg-base-200 rounded-box my-2 sm:justify-between w-full">
+  <div class="sm:flex sm:gap-1">
+    @for (route of routes; track route.path) {
+    <li>
+      <a [routerLink]="route.path" routerLinkActive="menu-active">{{
+        route.title
+      }}</a>
+    </li>
+    }
+  </div>
+  <li>
+    <app-theme-toggle />
+  </li>
+</ul> -->
+
+<div class="navbar bg-base-100 shadow-sm">
+  <div class="navbar-start">
+    <div class="dropdown">
+      <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" /> </svg>
+      </div>
+      <ul
+        tabindex="0"
+        class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+      >
+        @for (route of routes; track route.path) {
+        <li>
+          <a [routerLink]="route.path" routerLinkActive="menu-active">{{
+            route.title
+          }}</a>
+        </li>
+        }
+      </ul>
+    </div>
+    <a class="btn btn-ghost text-xl">Tu App</a>
+  </div>
+
+  <div class="navbar-center hidden lg:flex">
+    <ul class="menu menu-horizontal px-1">
+      @for (route of routes; track route.path) {
+      <li>
+        <a [routerLink]="route.path" routerLinkActive="menu-active">{{
+          route.title
+        }}</a>
+      </li>
+      }
+    </ul>
+  </div>
+
+  <div class="navbar-end">
+    <app-theme-toggle class="btn btn-ghost btn-circle" />
+  </div>
+</div>
