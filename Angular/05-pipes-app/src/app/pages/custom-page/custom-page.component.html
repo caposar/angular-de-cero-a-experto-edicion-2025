@@ -1,1 +1,163 @@
-<p>custom-page works!</p>,
+<section class="mx-5">
+  <h1 class="text-2xl font-bold">Pipes personalizados</h1>
+  <h3 class="text-xl font-thin">Pipes no incluidos en Angular</h3>
+</section>
+
+<div class="stats shadow">
+  <div class="stat">
+    <div class="stat-title">ToggleCasePipe</div>
+    <div class="stat-value">{{ name() | toggleCase : upperCase() }}</div>
+    <div class="stat-desc">
+      {{ name() }}
+      <span class="text-orange-500 dark:text-amber-400 font-bold"
+        >| toggleCase</span
+      >
+      <span class="text-orange-500 dark:text-amber-400 font-bold">
+        : {{ upperCase() }}</span
+      >
+    </div>
+
+    <button (click)="onToggle()" class="btn btn-primary mt-2">
+      Toggle Case
+    </button>
+  </div>
+</div>
+
+<div class="divider my-2"></div>
+
+<section class="mx-5 my-2">
+  <h1 class="text-2xl">
+    Filtrando por:
+    <span class="font-bold text-accent">{{ searchQuery() }}</span>
+    ordenando por:
+    <span class="font-bold text-accent"
+      >{{ sortBy() }} ({{ sortDirection() }})</span
+    >
+  </h1>
+
+  <div class="flex flex-wrap gap-y-5 justify-between mt-5">
+    <input
+      type="text"
+      class="input input-bordered max-w-xs"
+      placeholder="Escriba el nombre del Héroe a filtrar"
+      (input)="searchQuery.set(textSearch.value)"
+      #textSearch
+    />
+    <div class="flex flex-wrap gap-2 order-first sm:order-none">
+      <!-- Botones de ordenamiento -->
+      <button
+        (click)="sortBy.set('name')"
+        class="btn w-28"
+        [class.btn-primary]="sortBy() === 'name'"
+      >
+        Por nombre
+      </button>
+      <button
+        (click)="sortBy.set('canFly')"
+        class="btn w-28"
+        [class.btn-primary]="sortBy() === 'canFly'"
+      >
+        Por volar
+      </button>
+      <button
+        (click)="sortBy.set('color')"
+        class="btn w-28"
+        [class.btn-primary]="sortBy() === 'color'"
+      >
+        Por color
+      </button>
+      <button
+        (click)="sortBy.set('creator')"
+        class="btn w-28"
+        [class.btn-primary]="sortBy() === 'creator'"
+      >
+        Por creador
+      </button>
+
+      <!-- Dropdown de dirección -->
+      <div class="dropdown dropdown-end">
+        <!-- Botón con ícono ▼ y texto dinámico -->
+        <div tabindex="0" role="button" class="btn btn-primary">
+          Dirección:
+          <span>
+            {{ sortDirection() === "asc" ? "Ascendente" : "Descendente" }}
+          </span>
+          <span class="text-xs">▼</span>
+        </div>
+
+        <!-- Opciones -->
+        <ul
+          tabindex="0"
+          class="dropdown-content z-1 menu w-52 rounded-box bg-base-100 p-2 shadow-sm"
+        >
+          <li>
+            <button
+              (click)="sortDirection.set('asc')"
+              onclick="document.activeElement.blur()"
+            >
+              Ascendente
+            </button>
+          </li>
+          <li>
+            <button
+              (click)="sortDirection.set('desc')"
+              onclick="document.activeElement.blur()"
+            >
+              Descendente
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="mx-5 mb-10 overflow-x-auto">
+  <table class="table table-xs">
+    <!-- head -->
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Nombre</th>
+        <th>Puede volar</th>
+        <th>Color</th>
+        <th>Creador</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (hero of heroes() | heroFilter: searchQuery() | heroSortBy: sortBy()
+      : sortDirection(); track hero.id; let i = $index) {
+      <tr>
+        <td>{{ i + 1 }}</td>
+        <td>{{ hero.name }}</td>
+        <td>
+          <span
+            class="text-xs w-44"
+            [class.text-success]="hero.canFly"
+            [class.text-accent]="!hero.canFly"
+          >
+            {{ hero.canFly | canfly }}
+          </span>
+        </td>
+        <td>
+          <!-- <span class="text-xs w-44" [style.color]="colorTexto(hero.color)">
+            {{ hero.color | titlecase }}
+          </span> -->
+          <span class="text-xs w-44" [style.color]="hero.color | heroTextColor">
+            {{ hero.color | heroColor | titlecase }}
+          </span>
+        </td>
+        <td>
+          <span
+            class="text-xs w-44"
+            [class.text-primary]="hero.creator === 0"
+            [class.text-accent]="hero.creator === 1"
+          >
+            {{ hero.creator | heroCreator }}
+          </span>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</section>
