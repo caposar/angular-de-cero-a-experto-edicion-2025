@@ -103,9 +103,9 @@ export class DynamicPageComponent {
 
   private loadDefaultGames(): void {
     this.favoriteGames.clear();
-    this.defaultFavoriteGames.forEach(game =>
-      this.favoriteGames.push(this.fb.control(game, Validators.required))
-    );
+    // this.defaultFavoriteGames.forEach(game =>
+    //   this.favoriteGames.push(this.fb.control(game, Validators.required))
+    // );
   }
 
 }
