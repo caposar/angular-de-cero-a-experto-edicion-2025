@@ -1,0 +1,149 @@
+<h2>Reactivos: Básicos</h2>
+<hr />
+
+<div class="row">
+  <div class="col">
+    <form autocomplete="off" [formGroup]="myForm" (ngSubmit)="onSave()">
+      <!-- Campo de producto -->
+      <div class="mb-3 row">
+        <label class="col-sm-3 col-form-label">Producto</label>
+        <div class="col-sm-9">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Nombre del producto"
+            formControlName="name"
+          />
+          @if (formUtils.isInvalidField(myForm, "name")) {
+          <span class="form-text text-danger">
+            {{ formUtils.getFieldError(myForm, "name") }}
+          </span>
+          }
+        </div>
+      </div>
+
+      <!-- Campo de producto -->
+      <div class="mb-3 row">
+        <label class="col-sm-3 col-form-label">Precio</label>
+        <div class="col-sm-9">
+          <input
+            type="number"
+            class="form-control"
+            placeholder="Precio del producto"
+            formControlName="price"
+          />
+          @if (formUtils.isInvalidField(myForm, "price")) {
+          <span class="form-text text-danger">
+            {{ formUtils.getFieldError(myForm, "price") }}
+          </span>
+          }
+        </div>
+      </div>
+
+      <!-- Campo de existencias -->
+      <div class="mb-3 row">
+        <label class="col-sm-3 col-form-label">Existencias</label>
+        <div class="col-sm-9">
+          <input
+            type="number"
+            class="form-control"
+            placeholder="Existencias del producto"
+            formControlName="inStorage"
+          />
+
+          @if (formUtils.isInvalidField(myForm, "inStorage")) {
+          <span class="form-text text-danger">
+            {{ formUtils.getFieldError(myForm, "inStorage") }}
+          </span>
+          }
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <button type="submit" class="btn btn-primary float-end">
+            Guardar
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <div class="row">
+      <div class="col-sm-4">
+        <span class="fw-bold">Form Valid</span>
+        <pre class="p-3 mb-2 bg-secondary text-white">{{
+          myForm.valid | json
+        }}</pre>
+      </div>
+
+      <div class="col-sm-4">
+        <span class="fw-bold">Form Pristine</span>
+        <pre class="p-3 mb-2 bg-secondary text-white">{{
+          myForm.pristine | json
+        }}</pre>
+      </div>
+
+      <div class="col-sm-4">
+        <span class="fw-bold">Form Touched</span>
+        <pre class="p-3 mb-2 bg-secondary text-white">{{
+          myForm.touched | json
+        }}</pre>
+      </div>
+
+      <div class="col-sm-4">
+        <span class="fw-bold">Form Value</span>
+        <pre class="p-3 mb-2 bg-secondary text-white">{{
+          myForm.value | json
+        }}</pre>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-4">
+        <span class="fw-bold">Producto</span>
+        <pre class="p-3 mb-2 bg-secondary text-white">{{
+          myForm.controls.name.value | json
+        }}</pre>
+      </div>
+      <div class="col-sm-4">
+        <span class="fw-bold">Precio</span>
+        <pre class="p-3 mb-2 bg-secondary text-white">{{
+          myForm.controls.price.value | json
+        }}</pre>
+      </div>
+      <div class="col-sm-4">
+        <span class="fw-bold">Stock</span>
+        <pre class="p-3 mb-2 bg-secondary text-white">{{
+          myForm.controls.inStorage.value | json
+        }}</pre>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-4">
+        <span class="fw-bold">Errores en name</span>
+        <!-- Acceso directo (recomendado si el nombre es fijo) -->
+        <pre class="p-3 mb-2 bg-secondary text-white">{{
+          myForm.controls.name.errors | json
+        }}</pre>
+      </div>
+      <div class="col-sm-4">
+        <span class="fw-bold">Errores en price</span>
+        <!-- Acceso con brackets (útil para nombres dinámicos ej: form.controls[fieldName].errors) -->
+        <pre class="p-3 mb-2 bg-secondary text-white">{{
+          myForm.controls["price"].errors | json
+        }}</pre>
+      </div>
+      <div class="col-sm-4">
+        <span class="fw-bold">Errores en inStorage</span>
+        <pre class="p-3 mb-2 bg-secondary text-white">{{
+          myForm.controls["inStorage"].errors | json
+        }}</pre>
+      </div>
+    </div>
+  </div>
+</div>

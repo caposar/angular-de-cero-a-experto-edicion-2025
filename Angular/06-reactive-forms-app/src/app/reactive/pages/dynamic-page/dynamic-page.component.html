@@ -1,0 +1,163 @@
+<h2>Reactivos: <small> Dinámicos </small></h2>
+<hr />
+
+<form autocomplete="off" [formGroup]="myForm" (ngSubmit)="submitForm()">
+  <!-- Nombre -->
+  <div class="mb-3 row">
+    <label class="col-sm-3 col-form-label">Nombre</label>
+    <div class="col-sm-9">
+      <input
+        class="form-control"
+        placeholder="Nombre de la persona"
+        formControlName="name"
+      />
+      @if (formUtils.isInvalidField(myForm, "name")) {
+      <span class="form-text text-danger">
+        {{ formUtils.getFieldError(myForm, "name") }}
+      </span>
+      }
+    </div>
+  </div>
+
+  <!-- Agregar Favorito -->
+  <div class="mb-3 row">
+    <label class="col-sm-3 col-form-label">Agregar</label>
+    <div class="col-sm-9">
+      <div class="input-group">
+        <input
+          class="form-control"
+          placeholder="Agregar juego a lista de favoritos"
+          [formControl]="newFavorite"
+          (keydown.enter)="addToFavorites($event)"
+        />
+        <button
+          class="btn btn-outline-primary"
+          type="button"
+          (click)="addToFavorites($event)"
+        >
+          Agregar favorito
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lista de Juegos Favoritos -->
+  <div class="mb-3 row">
+    <label class="col-sm-3 col-form-label">Favoritos</label>
+    <div class="col-sm-9" formArrayName="favoriteGames">
+      @for (favoriteGame of favoriteGames.controls; track favoriteGame; let i =
+      $index) {
+      <div class="mb-1">
+        <div class="input-group">
+          <input class="form-control" type="text" [formControlName]="i" />
+
+          <button
+            class="btn btn-outline-danger"
+            type="button"
+            (click)="deleteFavorite(i)"
+          >
+            Eliminar
+          </button>
+        </div>
+        @if (formUtils.isControlInvalid(favoriteGame)) {
+        <span class="form-text text-danger">
+          {{ formUtils.getControlError(favoriteGame) }}
+        </span>
+        }
+      </div>
+      } @if (formUtils.isControlInvalid(myForm.get('favoriteGames'))) {
+      <span class="form-text text-danger">
+        {{ formUtils.getControlError(myForm.get("favoriteGames")) }}
+      </span>
+      }
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <button
+        type="submit"
+        class="btn btn-primary float-end"
+      >
+        Guardar
+      </button>
+    </div>
+  </div>
+</form>
+
+<div class="row">
+  <div class="col-sm-4">
+    <span class="fw-bold">Form Valid</span>
+    <pre class="p-3 mb-2 bg-secondary text-white">{{
+      myForm.valid | json
+    }}</pre>
+  </div>
+  <div class="col-sm-4">
+    <span class="fw-bold">Form Value</span>
+    <pre class="p-3 mb-2 bg-secondary text-white">{{
+      myForm.value | json
+    }}</pre>
+  </div>
+  <div class="col-sm-4">
+    <span class="fw-bold">Form Errors</span><br />
+    <span
+      ><b>Nota:</b> No se muestran errores ya que no hay errores aplicados
+      directamente al FormGroup mismo, sino a sus controles internos (name y
+      favoriteGames)</span
+    >
+    <pre class="p-3 mb-2 bg-secondary text-white">{{
+      myForm.errors | json
+    }}</pre>
+  </div>
+</div>
+
+<br />
+
+<div class="row">
+  <div class="col-sm-4">
+    <span class="fw-bold">Array Valid</span>
+    <pre class="p-3 mb-2 bg-secondary text-white">{{
+      favoriteGames.valid | json
+    }}</pre>
+  </div>
+  <div class="col-sm-4">
+    <span class="fw-bold">Array Value</span>
+    <pre class="p-3 mb-2 bg-secondary text-white">{{
+      favoriteGames.value | json
+    }}</pre>
+  </div>
+  <div class="col-sm-4">
+    <span class="fw-bold">Array Errors</span>
+    <pre class="p-3 mb-2 bg-secondary text-white">{{
+      favoriteGames.errors | json
+    }}</pre>
+  </div>
+</div>
+
+<div class="col-sm-4">
+  <span class="fw-bold">Errores del campo Nombre</span>
+  <pre class="p-3 mb-2 bg-secondary text-white">{{
+    myForm.get("name")?.errors | json
+  }}</pre>
+</div>
+
+<hr />
+
+<h4>Errores de los Juegos Favoritos (FormArray)</h4>
+<div class="row">
+  @for (control of favoriteGames.controls; track control; let i = $index) {
+  <div class="col-sm-4">
+    <span class="fw-bold">Control {{ i + 1 }}</span>
+    <pre
+      class="p-3 mb-2 text-dark"
+      [class.bg-secondary]="control.valid"
+      [class.bg-warning]="control.invalid"
+      >{{ control.errors | json }}</pre
+    >
+    <p>
+      Válido: {{ control.valid }} | Tocado: {{ control.touched }} | Sucio:
+      {{ control.dirty }}
+    </p>
+  </div>
+  }
+</div>
