@@ -1,113 +1,201 @@
 <h2>Validaciones Reactivas</h2>
-<hr>
+<hr />
 
 <div class="row">
-    <div class="col">
+  <div class="col">
+    <form autocomplete="off" [formGroup]="myForm" (submit)="submitForm()">
+      <!-- Nombre -->
+      <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Nombre y apellido</label>
+        <div class="col-sm-9">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Nombre y apellido"
+            formControlName="name"
+          />
+          @if (formUtils.isInvalidField(myForm, "name")) {
+          <span class="form-text text-danger">
+            {{ formUtils.getFieldError(myForm, "name") }}
+          </span>
+          }
+        </div>
+      </div>
 
-        <form autocomplete="off">
+      <!-- Email -->
+      <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Email</label>
+        <div class="col-sm-9">
+          <input
+            type="email"
+            class="form-control"
+            placeholder="Email del usuario"
+            formControlName="email"
+            autocomplete="off"
+          />
+          @if (formUtils.isInvalidField(myForm, "email")) {
+          <span class="form-text text-danger">
+            {{ formUtils.getFieldError(myForm, "email") }}
+          </span>
+          }
+        </div>
+      </div>
 
-            <!-- Nombre -->
-            <div class="row mb-3">
-                <label class="col-sm-3 col-form-label">Nombre y apellido</label>
-                <div class="col-sm-9">
-                    <input type="text"
-                           class="form-control"
-                           placeholder="Nombre del usuario">
-
-                    <span class="form-text text-danger">
-                        Debe de ser en formato de nombre y apellido
-                    </span>
-                </div>
-            </div>
-
-            <!-- Email -->
-            <div class="row mb-3">
-                <label class="col-sm-3 col-form-label">Email</label>
-                <div class="col-sm-9">
-                    <input type="email"
-                           class="form-control"
-                           placeholder="Email del usuario">
-                    <span class="form-text text-danger">
-                        mensaje de error del email
-                    </span>
-                </div>
-            </div>
-
-            <!-- Username -->
-            <div class="row mb-3">
-                <label class="col-sm-3 col-form-label">Username</label>
-                <div class="col-sm-9">
-                    <input type="text"
-                           class="form-control"
-                           placeholder="Nombre código del usuario">
-                    <span class="form-text text-danger">
+      <!-- Username -->
+      <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Username</label>
+        <div class="col-sm-9">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Nombre código del usuario"
+            formControlName="username"
+          />
+          <!-- <span class="form-text text-danger">
                          El username no puede ser Strider
-                    </span>
-                </div>
-            </div>
+                    </span> -->
+          @if (formUtils.isInvalidField(myForm, "username")) {
+          <span class="form-text text-danger">
+            {{ formUtils.getFieldError(myForm, "username") }}
+          </span>
+          }
+        </div>
+      </div>
 
-            <!-- Password -->
-            <div class="row mb-3">
-                <label class="col-sm-3 col-form-label">Password</label>
-                <div class="col-sm-9">
-                    <input type="password"
-                           class="form-control"
-                           placeholder="Password de su cuenta">
+      <!-- Password -->
+      <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Password</label>
+        <div class="col-sm-9">
+          <input
+            type="password"
+            class="form-control"
+            placeholder="Password de su cuenta"
+            formControlName="password"
+            autocomplete="new-password"
+          />
 
-                    <span class="form-text text-danger">
+          <!-- <span class="form-text text-danger">
                          La contraseña debe de ser mayor de 6 caracteres.
-                    </span>
-                </div>
-            </div>
+                    </span> -->
+          @if (formUtils.isInvalidField(myForm, "password")) {
+          <span class="form-text text-danger">
+            {{ formUtils.getFieldError(myForm, "password") }}
+          </span>
+          }
+        </div>
+      </div>
 
-            <!-- Password2 -->
-            <div class="row mb-3">
-                <label class="col-sm-3 col-form-label">Confirmar</label>
-                <div class="col-sm-9">
-                    <input type="password"
-                           class="form-control"
-                           placeholder="Confirmar la contraseña">
+      <!-- Password2 -->
+      <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Confirmar</label>
+        <div class="col-sm-9">
+          <input
+            type="password"
+            class="form-control"
+            placeholder="Confirmar la contraseña"
+            formControlName="password2"
+            autocomplete="new-password"
+          />
 
-                    <span class="form-text text-danger">
+          <!-- <span class="form-text text-danger">
                          Las contraseñas deben de ser iguales
-                    </span>
-                </div>
-            </div>
+                    </span> -->
+          @if (formUtils.isInvalidField(myForm, "password2")) {
+          <span class="form-text text-danger">
+            {{ formUtils.getFieldError(myForm, "password2") }}
+          </span>
+          }
+        </div>
+      </div>
+      <!-- @if (myForm.hasError('fieldsMismatch') &&
+      !formUtils.isInvalidField(myForm, "password") &&
+      !formUtils.isInvalidField(myForm, "password2")) {
+      <span class="form-text text-danger">
+        {{ formUtils.getControlError(this.myForm) }}
+      </span>
+      } -->
 
+      @if (formUtils.shouldShowGroupError(myForm, 'fieldsMismatch', ['password',
+      'password2'])) {
+      <span class="form-text text-danger">
+        {{ formUtils.getControlError(this.myForm) }}
+      </span>
+      }
 
-            <div class="row">
-                <div class="col">
-                    <button class="btn btn-primary float-end"
-                            type="submit">
-                        Crear
-                    </button>
-                </div>
-            </div>
-
-
-        </form>
-    </div>
+      <div class="row">
+        <div class="col">
+          <button class="btn btn-primary float-end" type="submit">Crear</button>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>
 
+<div class="row">
+  <div class="col-sm-4">
+    <h5>Form Valid:</h5>
+    <pre class="p-3 mb-2 text-white" [ngClass]="myForm.valid ? 'bg-success' : 'bg-secondary'">{{
+      myForm.valid | json
+    }}</pre>
+  </div>
+  <div class="col-sm-4">
+    <h5>Form Status:</h5>
+    <pre class="p-3 mb-2 bg-secondary text-white">{{
+      myForm.status | json
+    }}</pre>
+  </div>
+  <div class="col-sm-4">
+    <h5>Form Pending:</h5>
+    <pre class="p-3 mb-2 bg-secondary text-white">{{
+      myForm.pending | json
+    }}</pre>
+  </div>
+</div>
 
-<h2>Form Valid: </h2>
-<h2>Form Status: </h2>
-<h2>Form Pending: </h2>
-<h2>Form errors</h2>
-<pre>{{ 'formulario' | json }}</pre>
+<div class="row">
+  <div class="col-sm-4">
+    <h5>Form Value</h5>
+    <pre class="p-3 mb-2 bg-secondary text-white">{{
+      myForm.value | json
+    }}</pre>
+  </div>
+  <div class="col-sm-4">
+    <h5>Form errors</h5>
+    <pre class="p-3 mb-2 bg-secondary text-white">{{
+      myForm.errors | json
+    }}</pre>
+  </div>
+</div>
 
-<h5>Nombre</h5>
-<pre>{{ 'formulario' | json }}</pre>
-
-<h5>Email</h5>
-<pre>{{ 'formulario' | json }}</pre>
-
-<h5>Username</h5>
-<pre>{{ 'formulario' | json }}</pre>
-
-
-<h5>Password</h5>
-<pre>{{ 'formulario' | json }}</pre>
-
-<h5>Confirmar</h5>
-<pre>{{ 'formulario' | json }}</pre>
+<div class="row">
+  <div class="col-sm-4">
+    <h5>Errores Nombre</h5>
+    <pre class="p-3 mb-2 bg-secondary text-white">{{
+      myForm.get("name")?.errors | json
+    }}</pre>
+  </div>
+  <div class="col-sm-4">
+    <h5>Errores Email</h5>
+    <pre class="p-3 mb-2 bg-secondary text-white">{{
+      myForm.get("email")?.errors | json
+    }}</pre>
+  </div>
+  <div class="col-sm-4">
+    <h5>Errores Errores Username</h5>
+    <pre class="p-3 mb-2 bg-secondary text-white">{{
+      myForm.get("username")?.errors | json
+    }}</pre>
+  </div>
+  <div class="col-sm-4">
+    <h5>Errores Password</h5>
+    <pre class="p-3 mb-2 bg-secondary text-white">{{
+      myForm.get("password")?.errors | json
+    }}</pre>
+  </div>
+  <div class="col-sm-4">
+    <h5>Errores Confirmar</h5>
+    <pre class="p-3 mb-2 bg-secondary text-white">{{
+      myForm.get("password2")?.errors | json
+    }}</pre>
+  </div>
+</div>

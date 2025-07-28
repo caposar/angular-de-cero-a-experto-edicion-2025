@@ -1,4 +1,4 @@
-import { JsonPipe } from '@angular/common';
+import { CommonModule, JsonPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import {
   AbstractControl,
@@ -19,7 +19,7 @@ import { noDuplicatesValidator } from '../../../utils/validators/no-duplicates-a
 
 @Component({
   selector: 'app-dynamic-page',
-  imports: [JsonPipe, ReactiveFormsModule],
+  imports: [JsonPipe, ReactiveFormsModule, CommonModule],
   templateUrl: './dynamic-page.component.html',
 })
 export class DynamicPageComponent {
