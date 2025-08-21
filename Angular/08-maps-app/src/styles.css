@@ -1,0 +1,6 @@
+/* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+@plugin "daisyui" {
+   themes: light, dark --prefersdark --default;
+}
+@import "maplibre-gl/dist/maplibre-gl.css";

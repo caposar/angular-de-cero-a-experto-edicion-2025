@@ -1,0 +1,49 @@
+<!-- <div #map></div> -->
+<div #map class="w-full h-full"></div>
+<section id="controls">
+  <h2 class="text-2xl font-bold text-black mb-2">
+    Zoom
+    <span class="text-gray-500 font-normal">{{
+      zoom() | number : "1.0-0"
+    }}</span>
+  </h2>
+
+  <input
+    type="range"
+    min="0"
+    max="22"
+    [value]="zoom()"
+    class="range range-secondary"
+    (input)="zoom.set(+txtZoom.value)"
+    #txtZoom
+  />
+
+  <h2 class="text-2xl font-bold text-black mb-2">Coordenadas</h2>
+  <pre class="text-sm text-gray-500 font-normal"
+    >{{
+      {
+        latitude: coordinates().lat | number: '1.4-4',
+        longitude: coordinates().lng | number: '1.4-4',
+      } | json
+
+    }}
+  </pre>
+</section>
+
+<!-- <script>
+var map = new maplibregl.Map({
+  container: 'map',
+  style: 'https://demotiles.maplibre.org/style.json', // stylesheet location
+  center: [-74.5, 40], // starting position [lng, lat]
+  zoom: 9 // starting zoom
+});
+</script> -->
+
+<!-- <h1>Mapa con MapLibre y Signals</h1>
+<app-map [centerLat]="-34.6" [centerLng]="-58.4" [zoom]="4" /> -->
+
+<!-- <app-map-viewer
+  [centerLat]="-34.6037"
+  [centerLng]="-58.3816"
+  [zoom]="10"
+/> -->
