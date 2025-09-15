@@ -1,0 +1,14 @@
+<div class="toast toast-end toast-bottom space-y-2">
+  @for (t of toastService.toasts(); track t.id) {
+    <div
+      class="alert transition-opacity duration-500"
+      [class.alert-success]="t.type === 'success'"
+      [class.alert-error]="t.type === 'error'"
+      [class.alert-warning]="t.type === 'warning'"
+      [class.alert-info]="t.type === 'info'"
+    >
+      <span>{{ t.message }}</span>
+      <button class="btn btn-xs btn-ghost" (click)="toastService.eliminar(t.id)">✕</button>
+    </div>
+  }
+</div>
