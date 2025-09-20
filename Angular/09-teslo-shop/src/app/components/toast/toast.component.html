@@ -8,7 +8,7 @@
       [class.alert-info]="t.type === 'info'"
     >
       <span>{{ t.message }}</span>
-      <button class="btn btn-xs btn-ghost" (click)="toastService.eliminar(t.id)">✕</button>
+      <button class="btn btn-xs btn-ghost" (click)="toastService.remove(t.id)">✕</button>
     </div>
   }
 </div>
