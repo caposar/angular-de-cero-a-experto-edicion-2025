@@ -86,7 +86,7 @@ export class RegisterPageComponent {
         if (result.success) {
           this.router.navigateByUrl('/');
         } else {
-          this.toast.mostrar(result.message, 'error');
+          this.toast.show(result.message, 'error');
         }
       });
   }

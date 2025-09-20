@@ -17,22 +17,22 @@ export class ToastService {
 
   private idCounter = 0;
 
-  mostrar(message: string, type: ToastType = 'info', delay: number = 3000) {
+  show(message: string, type: ToastType = 'info', delay: number = 3000) {
     const id = ++this.idCounter;
     const toast: Toast = { id, message, type };
 
     this._toasts.update((list) => [...list, toast]);
 
     setTimeout(() => {
-      this.eliminar(id);
+      this.remove(id);
     }, delay);
   }
 
-  eliminar(id: number) {
+  remove(id: number) {
     this._toasts.update((list) => list.filter((t) => t.id !== id));
   }
 
-  limpiar() {
+  clear() {
     this._toasts.set([]);
   }
 }

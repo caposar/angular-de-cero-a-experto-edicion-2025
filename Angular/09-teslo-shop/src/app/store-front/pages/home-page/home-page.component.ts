@@ -11,7 +11,7 @@ import { PaginationService } from '@shared/components/pagination/pagination.serv
   templateUrl: './home-page.component.html',
 })
 export class HomePageComponent {
-  productsServise = inject(ProductsService);
+  productsService = inject(ProductsService);
   paginationService = inject(PaginationService);
 
   // activatedRoute = inject(ActivatedRoute);
@@ -29,10 +29,14 @@ export class HomePageComponent {
   products = computed(() => this.productsResource.value()?.products);
 
   productsResource = rxResource({
-    request: () => ({ page: this.paginationService.currentPage() - 1 }),
+    request: () => ({
+      page: this.paginationService.currentPage() - 1,
+      productsPerPage: this.paginationService.productsPerPage(),
+    }),
     loader: ({ request }) => {
-      return this.productsServise.getProducts({
-        offset: request.page * 9,
+      return this.productsService.getProducts({
+        limit: request.productsPerPage,
+        offset: request.page * request.productsPerPage,
       });
     },
   });

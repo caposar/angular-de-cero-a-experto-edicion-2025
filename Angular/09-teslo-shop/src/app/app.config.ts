@@ -1,4 +1,9 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import {
+  ApplicationConfig,
+  inject,
+  provideAppInitializer,
+  provideZoneChangeDetection,
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -10,6 +15,8 @@ import {
 
 import { loggingInterceptor } from '@shared/interceptors/loggin.interceptor';
 import { authInterceptor } from '@auth/interceptors/auth.interceptor';
+import { AuthService } from '@auth/services/auth.service';
+import { firstValueFrom } from 'rxjs';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,8 +26,13 @@ export const appConfig: ApplicationConfig = {
       withFetch(),
       withInterceptors([
         // loggingInterceptor,
-        authInterceptor
+        authInterceptor,
       ])
     ),
+    provideAppInitializer(() => {
+      const authService = inject(AuthService);
+
+      return firstValueFrom(authService.checkStatus());
+    }),
   ],
 };
