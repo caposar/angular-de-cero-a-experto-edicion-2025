@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { delay, Observable, of, tap } from 'rxjs';
+import { delay, forkJoin, map, Observable, of, switchMap, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 import { User } from '@auth/interfaces/user.interface';
@@ -93,17 +93,38 @@ export class ProductsService {
 
   updateProduct(
     id: string,
-    productLike: Partial<Product>
+    productLike: Partial<Product>,
+    imageFileList?: FileList
   ): Observable<Product> {
-    return this.http
-      .patch<Product>(`${baseUrl}/products/${id}`, productLike)
-      .pipe(tap((product) => this.updateProductCache(product)));
+    const currentImages = productLike.images ?? [];
+
+    return this.uploadImages(imageFileList).pipe(
+      map((imageNames) => ({
+        ...productLike,
+        images: [...currentImages, ...imageNames],
+      })),
+      switchMap((updatedProduct) =>
+        this.http.patch<Product>(`${baseUrl}/products/${id}`, updatedProduct)
+      ),
+      tap((product) => this.updateProductCache(product))
+    );
   }
 
-  createProduct(productLike: Partial<Product>): Observable<Product> {
-    return this.http
-      .post<Product>(`${baseUrl}/products`, productLike)
-      .pipe(tap((product) => this.addProductToCache(product)));
+  createProduct(
+    productLike: Partial<Product>,
+    imageFileList?: FileList
+  ): Observable<Product> {
+
+    return this.uploadImages(imageFileList).pipe(
+      map((imageNames) => ({
+        ...productLike,
+        images: [...imageNames],
+      })),
+      switchMap((newProduct) =>
+        this.http.post<Product>(`${baseUrl}/products`, newProduct)
+      ),
+      tap((product) => this.addProductToCache(product))
+    );
   }
 
   updateProductCache(product: Product) {
@@ -125,6 +146,57 @@ export class ProductsService {
   private addProductToCache(product: Product) {
     this.productCache.set(product.id, product);
     this.productsCache.clear();
-    console.log('Nuevo producto agregado al cache individual y caché de listas borrado');
+    console.log(
+      'Nuevo producto agregado al cache individual y caché de listas borrado'
+    );
+  }
+
+  // Tome un FileList y lo suba
+  uploadImages(images?: FileList): Observable<string[]> {
+    if (!images) return of([]);
+
+    const uploadObservables = Array.from(images).map((imageFile) =>
+      this.uploadImage(imageFile)
+    );
+
+    return forkJoin(uploadObservables).pipe(
+      tap((imageNames) => console.log({ imageNames }))
+    );
+  }
+
+  uploadImage(imageFile: File): Observable<string> {
+    const formData = new FormData();
+    formData.append('file', imageFile);
+
+    return this.http
+      .post<{ fileName: string }>(`${baseUrl}/files/product`, formData)
+      .pipe(map((resp) => resp.fileName));
+  }
+
+  deleteProduct(id: string): Observable<void> {
+    return this.http.delete<void>(`${baseUrl}/products/${id}`).pipe(
+      tap((resp) => console.log(resp)),
+      tap((product) => this.removeProductFromCache(id))
+    );
+  }
+
+  private removeProductFromCache(id: string) {
+    // // 1. Eliminar del caché de productos individuales
+    // this.productCache.delete(id);
+
+    // // 2. Eliminar de las listas de productos en el caché
+    // // Recorre todos los "pages" o "listas" que están en el caché de listas.
+    // this.productsCache.forEach((productsResponse) => {
+    //   // Filtra el array de productos para crear uno nuevo sin el producto eliminado.
+    //   productsResponse.products = productsResponse.products.filter(
+    //     (product) => product.id !== id
+    //   );
+    // });
+
+    // console.log('Producto eliminado de los cachés individual y de listas.');
+
+    this.productCache.clear();
+    this.productsCache.clear();
+    console.log('Todos los cachés de productos han sido limpiados.');
   }
 }

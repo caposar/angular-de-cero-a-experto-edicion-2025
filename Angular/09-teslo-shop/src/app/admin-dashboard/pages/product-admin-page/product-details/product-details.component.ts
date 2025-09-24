@@ -1,4 +1,12 @@
-import { Component, inject, input, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  input,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProductCarouselComponent } from '@products//components/product-carousel/product-carousel.component';
 import { firstValueFrom } from 'rxjs';
@@ -23,6 +31,12 @@ import { ToastService } from 'src/app/components/toast/toast.service';
 export class ProductDetailsComponent implements OnInit {
   product = input.required<Product>();
 
+  imagesToCarrousel = computed<string[]>(() => {
+    const allImages = [...this.product().images, ...this.tempImages()];
+
+    return allImages;
+  });
+
   router = inject(Router);
   fb = inject(FormBuilder);
   private toast = inject(ToastService);
@@ -30,6 +44,9 @@ export class ProductDetailsComponent implements OnInit {
 
   productsService = inject(ProductsService);
   wasSaved = signal(false);
+
+  imageFileList: FileList | undefined = undefined;
+  tempImages = signal<string[]>([]);
 
   productForm = this.fb.group({
     title: ['', Validators.required],
@@ -93,7 +110,7 @@ export class ProductDetailsComponent implements OnInit {
     if (this.product().id === 'new') {
       // Crear Producto
       const product = await firstValueFrom(
-        this.productsService.createProduct(productLike)
+        this.productsService.createProduct(productLike, this.imageFileList)
       );
 
       this.router.navigate(['/admin/products', product.id]);
@@ -103,20 +120,45 @@ export class ProductDetailsComponent implements OnInit {
     } else {
       // Actualizar Producto
       await firstValueFrom(
-        this.productsService.updateProduct(this.product().id, productLike)
+        this.productsService.updateProduct(this.product().id, productLike, this.imageFileList)
       );
 
       // this.showToast('Datos actualizados correctamente');
       this.toast.show('Datos actualizados correctamente', 'success');
     }
+  }
 
+  async eliminarProducto() {
+    try {
+      await firstValueFrom(
+        this.productsService.deleteProduct(this.product().id)
+      );
+
+      this.router.navigateByUrl('/admin/products');
+      this.toast.show('Producto eliminado correctamente', 'success');
+    } catch (error) {
+      console.error(error);
+      this.toast.show('Error al eliminar el producto', 'error');
+    }
   }
 
   showToast(mensaje: string, delay: number = 3000) {
     this.toastMessage.set(mensaje);
     this.wasSaved.set(true);
-      setTimeout(() => {
-        this.wasSaved.set(false);
-      }, delay);
+    setTimeout(() => {
+      this.wasSaved.set(false);
+    }, delay);
+  }
+
+  // Images
+  onFilesChanged(event: Event) {
+    const fileList = (event.target as HTMLInputElement).files;
+    this.imageFileList = fileList ?? undefined;
+
+    const imageUrls = Array.from(fileList ?? []).map((file) =>
+      URL.createObjectURL(file)
+    );
+
+    this.tempImages.set(imageUrls);
   }
 }

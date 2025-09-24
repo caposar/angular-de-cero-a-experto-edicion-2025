@@ -15,12 +15,18 @@ export class ProductImagePipe implements PipeTransform {
     }
 
     if (typeof value === 'string') {
+      if (value.includes('blob')) {
+        return value;
+      }
       return `${baseUrl}/files/product/${value}`;
     }
 
     const image = value.at(0);
 
     if (image) {
+      if (image.includes('blob')) {
+        return image;
+      }
       return `${baseUrl}/files/product/${image}`;
     }
 
