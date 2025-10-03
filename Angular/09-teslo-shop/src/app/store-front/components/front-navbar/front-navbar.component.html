@@ -1,62 +1,115 @@
-<div class="navbar bg-base-100 shadow-sm">
-  <div class="navbar-start">
-    <div class="dropdown">
-      <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-5 w-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
+<div class="drawer">
+  <input id="my-drawer-3" type="checkbox" class="drawer-toggle" />
+  <div class="drawer-content flex flex-col">
+    <!-- Navbar -->
+    <div class="navbar bg-base-300 w-full shadow-sm">
+      <div class="flex-none lg:hidden">
+        <label
+          for="my-drawer-3"
+          aria-label="open sidebar"
+          class="btn btn-square btn-ghost"
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M4 6h16M4 12h8m-8 6h16"
-          />
-        </svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            class="inline-block h-6 w-6 stroke-current"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            ></path>
+          </svg>
+        </label>
       </div>
-      <ul
-        tabindex="0"
-        class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
-      >
-        <li>
-          <a
-            routerLink="/gender/men"
-            class="btn btn-ghost"
-            routerLinkActive="text-secondary"
-          >
-            Hombres
-          </a>
-        </li>
-        <li>
-          <a
-            routerLink="/gender/women"
-            class="btn btn-ghost"
-            routerLinkActive="text-secondary"
-          >
-            Mujeres
-          </a>
-        </li>
-        <li>
-          <a
-            routerLink="/gender/kid"
-            class="btn btn-ghost"
-            routerLinkActive="text-secondary"
-          >
-            Kids
-          </a>
-        </li>
-      </ul>
+      <div class="navbar-start">
+        <a
+          routerLink="/"
+          class="btn btn-ghost text-xl font-montserrat-alternates"
+        >
+          Teslo
+          <span class="text-secondary">| Shop</span>
+        </a>
+      </div>
+      <!-- <div class="navbar-center hidden flex-none lg:block"> -->
+      <div class="navbar-center hidden lg:flex">
+        <ul class="menu menu-horizontal">
+          <!-- Navbar menu content here -->
+          <li>
+            <a
+              routerLink="/gender/men"
+              class="btn btn-ghost"
+              routerLinkActive="text-secondary"
+            >
+              Hombres
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/gender/women"
+              class="btn btn-ghost"
+              routerLinkActive="text-secondary"
+            >
+              Mujeres
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/gender/kid"
+              class="btn btn-ghost"
+              routerLinkActive="text-secondary"
+            >
+              Kids
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="navbar-end gap-4 hidden lg:flex">
+        @if (authService.isAdmin()) {
+        <a routerLink="/admin" class="btn text-accent">Admin Panel</a>
+        } @if (authService.authStatus() === 'authenticated') {
+        <button class="btn btn-ghost">
+          {{ authService.user()?.fullName }}
+        </button>
+        <button class="btn btn-error btn-sm" (click)="authService.logout()">
+          Salir
+        </button>
+        }
+        <!--  -->
+        @else if (authService.authStatus() === 'not-authenticated') {
+        <a class="btn btn-secondary" routerLink="/auth/login">Login</a>
+        }
+        <!--  -->
+        @else {
+        <a class="btn btn-ghost">...</a>
+        }
+        <app-theme-toggle class="btn btn-ghost btn-circle" />
+      </div>
     </div>
-    <a routerLink="/" class="btn btn-ghost text-xl font-montserrat-alternates">
-      Teslo
-      <span class="text-secondary">| Shop</span>
-    </a>
+    <!-- Page content here -->
+    <!-- Content -->
   </div>
-  <div class="navbar-center hidden lg:flex">
-    <ul class="menu menu-horizontal px-1">
+  <div class="drawer-side">
+    <label
+      for="my-drawer-3"
+      aria-label="close sidebar"
+      class="drawer-overlay"
+    ></label>
+    <ul class="menu bg-base-200 min-h-full w-80 p-4">
+      <li>
+        <a
+          routerLink="/"
+          class="btn btn-ghost text-xl font-montserrat-alternates"
+        >
+          Teslo
+          <span class="text-secondary">| Shop</span>
+        </a>
+      </li>
+      <div class="divider"></div>
+      <!-- Sidebar content here -->
       <li>
         <a
           routerLink="/gender/men"
@@ -84,27 +137,40 @@
           Kids
         </a>
       </li>
+      <!-- <li></li> -->
+      <div class="divider"></div>
+      <div class="flex flex-col gap-4">
+        @if (authService.isAdmin()) {
+          <li>
+            <a routerLink="/admin" class="btn btn-neutral text-accent">Admin Panel</a>
+          </li>
+        } @if (authService.authStatus() === 'authenticated') {
+          <li>
+            <button class="btn btn-ghost">
+              {{ authService.user()?.fullName }}
+            </button>
+          </li>
+          <li>
+            <button class="btn btn-error btn-sm" (click)="authService.logout()">
+              Salir
+            </button>
+          </li>
+        }
+        <!--  -->
+        @else if (authService.authStatus() === 'not-authenticated') {
+          <li>
+            <a class="btn btn-secondary" routerLink="/auth/login">Login</a>
+          </li>
+        }
+        <!--  -->
+        @else {
+          <li><a class="btn btn-ghost">...</a></li>
+        }
+        <div class="mx-auto">
+          <app-theme-toggle class="btn btn-ghost btn-circle" />
+        </div>
+      </div>
     </ul>
-  </div>
-  <div class="navbar-end gap-4">
-    @if (authService.isAdmin()) {
-      <a routerLink="/admin" class="btn text-accent">Admin Panel</a>
-    }
 
-    @if (authService.authStatus() === 'authenticated') {
-    <button class="btn btn-ghost">{{ authService.user()?.fullName }}</button>
-    <button class="btn btn-error btn-sm" (click)="authService.logout()">
-      Salir
-    </button>
-    }
-    <!--  -->
-    @else if (authService.authStatus() === 'not-authenticated') {
-    <a class="btn btn-secondary" routerLink="/auth/login">Login</a>
-    }
-    <!--  -->
-    @else {
-    <a class="btn btn-ghost">...</a>
-    }
-    <app-theme-toggle class="btn btn-ghost btn-circle" />
   </div>
 </div>

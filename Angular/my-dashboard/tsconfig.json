@@ -1,0 +1,53 @@
+/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
+/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    // --------------------------------------------------------------------
+    // ✅ Opción profesional y más usada:
+    // Definimos "baseUrl" (normalmente en "src") y creamos alias limpios.
+    // Esto permite escribir imports cortos y consistentes sin repetir "./src".
+    // Ejemplo de import:
+    //   import { ButtonComponent } from '@shared/components/button/button.component';
+    // --------------------------------------------------------------------
+    "baseUrl": "src",
+    "paths": {
+      "@shared/*": ["app/shared/*"],
+      "@interfaces/*": ["app/interfaces/*"],
+      "@services/*": ["app/services/*"],
+    },
+
+    // --------------------------------------------------------------------
+    // ⚡ Opción alternativa (también válida):
+    // No usamos "baseUrl". En su lugar, los paths se definen de forma relativa
+    // al tsconfig.json (usando "./src/..."). Funciona igual, pero es menos limpio
+    // cuando tienes muchos alias porque repites la ruta completa cada vez.
+    // --------------------------------------------------------------------
+    // "paths": {
+    //   "@shared/*": ["./src/app/shared/*"],
+    //   "@interfaces/*": ["./src/app/interfaces/*"],
+    //   "@services/*": ["app/services/*"],
+    // },
+
+    "outDir": "./dist/out-tsc",
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "bundler",
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "ES2022"
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  }
+}
