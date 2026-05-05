@@ -1,3 +1,3 @@
 export const environment = {
-  baseUrl: 'https://nest-teslo-shop-vglg.onrender.com/api',
+  baseUrl: 'https://teslo-shop-api.duckdns.org/api',
 };
