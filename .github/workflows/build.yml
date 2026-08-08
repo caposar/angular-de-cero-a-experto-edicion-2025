@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - 'Angular/10-nest-teslo-shop-backend/**'
+  workflow_dispatch:
 jobs:
   build:
     permissions:
