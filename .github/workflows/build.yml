@@ -3,14 +3,14 @@ on:
   push:
     branches: [main]
     paths:
-      - 'Angular/10-nest-teslo-shop-backend/**'
+      - "Angular/10-nest-teslo-shop-backend/**"
   workflow_dispatch:
 jobs:
   build:
     permissions:
       contents: read
       packages: write
-    uses: caposar/mantenimiento-clientes-ci/.github/workflows/build-reusable.yml@main
+    uses: caposar/devops-ci/.github/workflows/build-reusable.yml@main
     with:
       imagen: teslo-shop
       contexto: Angular/10-nest-teslo-shop-backend
